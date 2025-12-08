@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState } from 'react';
 import { FaSearch } from "react-icons/fa";
 
+
 export default function WeatherPage() {
 const [city, setCity] = useState('');
 
