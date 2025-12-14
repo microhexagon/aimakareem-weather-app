@@ -12,47 +12,43 @@ interface SearchBarProps {
 }
 
 export default function SearchBar({ city, setCity, handleSearch, handleGeolocation }: SearchBarProps) {
-
-    
-    const handleKeyPress = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter' && city.trim() !== '') {
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
             handleSearch();
         }
     };
 
     return (
-    <div>
         <div>
-            <h3 className="flex justify-center mb-6 font-medium text-3xl ">
+            <h1 className="text-3xl font-bold text-white text-center mb-4">
                 Weather Dashboard
-            </h3>
-        </div>
-        <div className="flex items-center space-x-2 w-full">
-            <input
-                type="text"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Enter city name"
-                className="flex-1 px-6 py-4 rounded-2xl bg-gray-800 text-white border border-blue-400 focus:outline-none focus:border-blue-500 placeholder-gray-500"
-            />
+            </h1>
+            
+            <div className="flex items-center space-x-2 mb-4">
+                <input
+                    type="text"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    placeholder="Enter city name"
+                    className="flex-1 px-4 py-3 bg-gray-800 text-white border border-blue-400 rounded-2xl focus:outline-none focus:border-blue-500 placeholder-gray-500"
+                />
+                <button
+                    onClick={handleSearch}
+                    className="bg-blue-500 text-white px-6 py-3 rounded-2xl hover:bg-blue-600 hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2"
+                >
+                    🔍 Search
+                </button>
+            </div>
+
             <button
-                className="bg-blue-500 text-white font-medium text-xl px-6 py-4 flex items-center justify-center gap-2 rounded-2xl hover:bg-gray-700 hover:scale-105 transition-all duration-300"
-                onClick={handleSearch}
-            >
-                <FaSearch />
-                Search
-            </button>
-        </div>
-        <div>
-            <button 
                 onClick={handleGeolocation}
-                className="bg-blue-500 font-medium text-xl px-6 py-4 flex justify-center items-center gap-2 rounded-2xl hover:bg-blue-700 hover:scale-105 transition-all duration-300 mt-4 w-full"
+                className="w-full bg-blue-500 text-white px-4 py-3 rounded-2xl hover:bg-blue-600 hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2"
             >
                 <IoLocationSharp className="text-blue-950 text-3xl font-bold"/>
-                Use My Location
+                    Use My Location
             </button>
         </div>
-    </div>
     );
 }
+
