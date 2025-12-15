@@ -1,9 +1,8 @@
 'use client';
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import WeatherCard from "../../components/WeatherCard";
 import SearchBar from "../../components/SearchBar";
 import BackBtn from "../../components/BackBtn";
-
 
 export default function WeatherPage() {
     const [city, setCity] = useState('');
@@ -19,19 +18,19 @@ export default function WeatherPage() {
         const weather = weatherMain?.toLowerCase();
         
         if (weather?.includes('clear') || weather?.includes('sunny')) {
-            return 'from-orange-400 via-yellow-500 to-orange-600'; // Sunny
+            return 'from-orange-400 via-yellow-500 to-orange-600';
         } else if (weather?.includes('cloud')) {
-            return 'from-gray-600 via-gray-700 to-gray-900'; // Cloudy
+            return 'from-gray-600 via-gray-700 to-gray-900';
         } else if (weather?.includes('rain') || weather?.includes('drizzle')) {
-            return 'from-blue-700 via-blue-900 to-gray-900'; // Rainy
+            return 'from-blue-700 via-blue-900 to-gray-900';
         } else if (weather?.includes('thunder') || weather?.includes('storm')) {
-            return 'from-purple-900 via-gray-900 to-black'; // Stormy
+            return 'from-purple-900 via-gray-900 to-black';
         } else if (weather?.includes('snow')) {
-            return 'from-blue-200 via-blue-300 to-gray-400'; // Snowy
+            return 'from-blue-200 via-blue-300 to-gray-400';
         } else if (weather?.includes('mist') || weather?.includes('fog') || weather?.includes('haze')) {
-            return 'from-gray-400 via-gray-500 to-gray-600'; // Foggy
+            return 'from-gray-400 via-gray-500 to-gray-600';
         } else {
-            return 'from-gray-900 to-gray-800'; // Default
+            return 'from-gray-900 to-gray-800';
         }
     };
 
@@ -53,7 +52,6 @@ export default function WeatherPage() {
             const data = await res.json();
             setWeather(data);
             
-            // ✅ Background change
             const newBg = getWeatherBackground(data.weather[0].main);
             setBgClass(newBg);
         } catch (err: any) {
@@ -88,9 +86,8 @@ export default function WeatherPage() {
 
                     const data = await res.json();
                     setWeather(data);
-                    setCity(data.name); // Input field mein city name set karo
+                    setCity(data.name);
                     
-                    // ✅ Background change
                     const newBg = getWeatherBackground(data.weather[0].main);
                     setBgClass(newBg);
                 } catch (err: any) {
@@ -109,10 +106,13 @@ export default function WeatherPage() {
     };
 
     return (
-        <div className={`min-h-screen flex justify-center items-center bg-gradient-to-b ${bgClass} p-4 transition-all duration-500`}>
-            <div className='flex flex-col border border-blue-400 max-w-md w-full h-full md:h-auto bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl shadow-lg p-6 space-y-6'>
+        <div className={`min-h-screen flex justify-center items-center bg-gradient-to-b ${bgClass} p-3 sm:p-4 md:p-6 transition-all duration-500`}>
+            <div className='flex flex-col border border-blue-400 w-full max-w-md bg-white bg-opacity-10 backdrop-blur-lg rounded-2xl sm:rounded-3xl shadow-lg p-4 sm:p-5 md:p-6 space-y-4 sm:space-y-5 md:space-y-6'>
                 
-                {/* Search Bar - TOP  */}
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white text-center">
+                    Weather Dashboard
+                </h1>
+
                 <SearchBar 
                     city={city} 
                     setCity={setCity} 
@@ -124,15 +124,10 @@ export default function WeatherPage() {
                     <WeatherCard weather={weather} loading={loading} error={error} />
                 </div>
 
-                <div className="flex justify-center">
+                <div className="flex justify-center pt-2">
                     <BackBtn />
                 </div>
-            
             </div>
         </div>
     );
 }
-
-
-
-
