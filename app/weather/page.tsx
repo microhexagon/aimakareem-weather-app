@@ -111,7 +111,7 @@ export default function WeatherPage() {
         <div className={`min-h-screen flex justify-center items-center bg-gradient-to-b ${bgClass} p-4 transition-all duration-500`}>
             <div className='flex flex-col border border-blue-400 max-w-md w-full h-full md:h-auto bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl shadow-lg p-6 space-y-6'>
                 
-                {/* Search Bar - TOP */}
+                {/* Search Bar - TOP  */}
                 <SearchBar 
                     city={city} 
                     setCity={setCity} 
@@ -119,12 +119,10 @@ export default function WeatherPage() {
                     handleGeolocation={handleGeolocation}
                 />
 
-                {/* Weather Card - CENTER */}
                 <div className="flex-1 flex items-center justify-center w-full">
                     <WeatherCard weather={weather} loading={loading} error={error} />
                 </div>
 
-                {/* Back Button - BOTTOM */}
                 <div className="flex justify-center">
                     <BackBtn />
                 </div>
