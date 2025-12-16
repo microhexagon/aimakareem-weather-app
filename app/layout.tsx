@@ -10,6 +10,9 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Weather App",
   description: "Simple Weather App",
+  icons: {
+    icon: '/favicon.png',  // 👈 Sirf ye line add karo
+  },
 };
 
 export default function RootLayout({
