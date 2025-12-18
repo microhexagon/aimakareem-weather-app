@@ -1,14 +1,18 @@
-
 'use client';
-
+import { WiHumidity } from "react-icons/wi";
+import { FaWind, FaTemperatureHigh } from "react-icons/fa6";
+import { TbGauge } from "react-icons/tb";
+import { LuLoaderPinwheel } from "react-icons/lu";
 import { IoEarth } from "react-icons/io5";
-
-interface WeatherCardProps {
-    weather: any;
-    loading: boolean;
-    error: string;
-    theme: WeatherTheme;
-}
+import { 
+    WiDaySunny, 
+    WiCloudy, 
+    WiRain, 
+    WiSnow, 
+    WiThunderstorm,
+    WiFog,
+    WiDayCloudyHigh 
+} from "react-icons/wi";
 
 export interface WeatherTheme {
     bgGradient: string;
@@ -19,115 +23,149 @@ export interface WeatherTheme {
     textPrimary: string;
     textSecondary: string;
     textAccent: string;
+    btnBg: string;
+    btnText: string;
+    btnHover: string;
 }
 
-export default function WeatherCard({ weather, loading, error, theme }: WeatherCardProps) {
+export default function WeatherCard({
+    weather,
+    loading,
+    error,
+    theme,
+}: {
+    weather: any;
+    loading: boolean;
+    error: string;
+    theme: WeatherTheme;
+}) {
 
-    // Loading State
-    if (loading) {
-        return (
-            <div className={`${theme.cardBg} border ${theme.cardBorder} rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10`}>
-                <div className='flex flex-col items-center gap-3 sm:gap-4'>
-                    <div className='animate-spin text-3xl sm:text-4xl md:text-5xl'>🌀</div>
-                    <p className={`${theme.textPrimary} text-sm sm:text-base md:text-lg`}>Loading weather data...</p>
-                </div>
-            </div>
-        );
+const getWeatherIcon = (main: string, temp: number) => {
+    const iconClass = "text-5xl sm:text-6xl md:text-7xl drop-shadow-lg";
+    
+    if (temp >= 30) {
+        return <WiDaySunny className={`${iconClass} text-yellow-400 animate-pulse`} />;
     }
-
-    // Error State
-    if (error) {
-        return (
-            <div className='bg-red-500/20 border border-red-500 text-red-300 px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl text-center text-sm sm:text-base'>
-                ❌ {error}
-            </div>
-        );
+    
+    switch (main?.toLowerCase()) {
+        case 'clear':
+        return <WiDaySunny className={`${iconClass} text-yellow-300`} />;
+        case 'clouds':
+            return <WiCloudy className={`${iconClass} text-gray-300`} />;
+        case 'rain':
+        case 'drizzle':
+            return <WiRain className={`${iconClass} text-blue-400`} />;
+        case 'snow':
+            return <WiSnow className={`${iconClass} text-blue-200`} />;
+        case 'thunderstorm':
+            return <WiThunderstorm className={`${iconClass} text-purple-400`} />;
+        case 'mist':
+        case 'fog':
+        case 'haze':
+            return <WiFog className={`${iconClass} text-gray-400`} />;
+        default:
+        return <WiDayCloudyHigh className={`${iconClass} text-sky-400`} />;
     }
+};
 
-    // Weather icon selector function
-    const getWeatherIcon = (main: string) => {
-        const icons: any = {
-            'Clear': '☀️',
-            'Clouds': '☁️',
-            'Rain': '🌧️',
-            'Drizzle': '🌦️',
-            'Thunderstorm': '⛈️',
-            'Snow': '❄️',
-            'Mist': '🌫️',
-            'Fog': '🌫️',
-            'Haze': '🌫️',
-            'Smoke': '💨'
-        };
-        return icons[main] || '🌤️';
-    };
-
-    // Weather Data Display
-    if (weather) {
-        return (
-            <div className="w-full">
-                {/* Main Weather Info */}
-                <div className={`${theme.cardBg} border ${theme.cardBorder} rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-2xl`}>
-                    <div className='text-center mb-4 sm:mb-6'>
-                        <div className='text-4xl sm:text-5xl md:text-7xl mb-2 sm:mb-3'>
-                            {getWeatherIcon(weather.weather[0].main)}
-                        </div>
-                        <h2 className={`text-xl sm:text-2xl md:text-3xl font-bold ${theme.textPrimary} mb-1 sm:mb-2 px-2`}>
-                            {weather.name}, {weather.sys.country}
-                        </h2>
-                        <p className={`text-3xl sm:text-4xl md:text-5xl font-bold ${theme.textAccent} mb-1 sm:mb-2`}>
-                            {Math.round(weather.main.temp)}°C
-                        </p>
-                        <p className={`text-base sm:text-lg md:text-xl ${theme.textSecondary} capitalize px-2`}>
-                            {weather.weather[0].description}
-                        </p>
-                    </div>
-                </div>
-
-                {/* Weather Details Boxes */}
-                <div className='grid grid-cols-2 gap-3 sm:gap-4 md:gap-5 mt-3 sm:mt-4 md:mt-5'>
-                    {/* Humidity */}
-                    <div className={`${theme.detailsBg} rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 text-center border ${theme.detailsBorder}`}>
-                        <div className='text-2xl sm:text-3xl md:text-4xl mb-1 sm:mb-2'>💧</div>
-                        <p className={`${theme.textSecondary} text-xs sm:text-sm mb-0.5 sm:mb-1 font-medium`}>Humidity</p>
-                        <p className={`text-base sm:text-lg md:text-xl font-bold ${theme.textPrimary}`}>{weather.main.humidity}%</p>
-                    </div>
-
-                    {/* Wind Speed */}
-                    <div className={`${theme.detailsBg} rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 text-center border ${theme.detailsBorder}`}>
-                        <div className='text-2xl sm:text-3xl md:text-4xl mb-1 sm:mb-2'>💨</div>
-                        <p className={`${theme.textSecondary} text-xs sm:text-sm mb-0.5 sm:mb-1 font-medium`}>Wind Speed</p>
-                        <p className={`text-base sm:text-lg md:text-xl font-bold ${theme.textPrimary}`}>{Math.round(weather.wind.speed * 3.6)} km/h</p>
-                    </div>
-
-                    {/* Feels Like */}
-                    <div className={`${theme.detailsBg} rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 text-center border ${theme.detailsBorder}`}>
-                        <div className='text-2xl sm:text-3xl md:text-4xl mb-1 sm:mb-2'>🌡️</div>
-                        <p className={`${theme.textSecondary} text-xs sm:text-sm mb-0.5 sm:mb-1 font-medium`}>Feels Like</p>
-                        <p className={`text-base sm:text-lg md:text-xl font-bold ${theme.textPrimary}`}>{Math.round(weather.main.feels_like)}°C</p>
-                    </div>
-
-                    {/* Pressure */}
-                    <div className={`${theme.detailsBg} rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 text-center border ${theme.detailsBorder}`}>
-                        <div className='text-2xl sm:text-3xl md:text-4xl mb-1 sm:mb-2'>🔽</div>
-                        <p className={`${theme.textSecondary} text-xs sm:text-sm mb-0.5 sm:mb-1 font-medium`}>Pressure</p>
-                        <p className={`text-base sm:text-lg md:text-xl font-bold ${theme.textPrimary}`}>{weather.main.pressure} hPa</p>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    // Default State (No data yet)
+if (loading) {
     return (
-        <div className={`${theme.cardBg} border ${theme.cardBorder} rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10`}>
-            <div className='text-center'>
-                <div className='flex justify-center text-3xl sm:text-4xl md:text-5xl mb-2 sm:mb-3 text-green-400'>
-                    <IoEarth />
-                </div>
-                <p className={`${theme.textSecondary} text-sm sm:text-base md:text-lg px-4`}>
-                    Enter a city name to see weather data
-                </p>
-            </div>
-        </div>
+    <div className={`${theme.cardBg} border ${theme.cardBorder} rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center shadow-xl backdrop-blur-sm h-full flex flex-col items-center justify-center`}>
+        <LuLoaderPinwheel className={`text-3xl sm:text-4xl animate-spin mx-auto ${theme.textAccent}`} />
+        <p className={`${theme.textSecondary} text-xs sm:text-sm mt-3`}>Fetching weather data...</p>
+    </div>
     );
 }
+
+if (error) {
+    return (
+    <div className="bg-red-500/10 border border-red-500/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center shadow-xl backdrop-blur-sm h-full flex items-center justify-center">
+        <p className="text-red-400 font-medium text-sm sm:text-base">{error}</p>
+    </div>
+    );
+}
+
+if (!weather) {
+    return (
+    <div className={`${theme.cardBg} border ${theme.cardBorder} rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center shadow-xl backdrop-blur-sm h-full flex flex-col items-center justify-center`}>
+        <IoEarth className={`text-4xl sm:text-5xl mx-auto ${theme.textAccent} mb-3`} />
+        <p className={`${theme.textSecondary} text-xs sm:text-sm`}>
+            Search a city to view weather
+        </p>
+    </div>
+    );
+}
+
+    const temp = Math.round(weather.main.temp);
+    const feelsLike = Math.round(weather.main.feels_like);
+    const windSpeed = Math.round(weather.wind.speed * 3.6);
+
+const weatherDetails = [
+    { 
+    icon: <WiHumidity />, 
+    label: "Humidity", 
+    value: `${weather.main.humidity}%`,
+    color: "text-blue-400"
+},
+    { 
+    icon: <FaWind />, 
+    label: "Wind", 
+    value: `${windSpeed} km/h`,
+    color: "text-cyan-400"
+},
+    { 
+    icon: <FaTemperatureHigh />, 
+    label: "Feels Like", 
+    value: `${feelsLike}°C`,
+    color: temp >= 30 ? "text-orange-400" : "text-blue-300"
+    },
+    { 
+    icon: <TbGauge />, 
+    label: "Pressure", 
+    value: `${weather.main.pressure} hPa`,
+    color: "text-purple-400"
+    },
+];
+
+return (
+    <div className="space-y-2 sm:space-y-3 h-full flex flex-col animate-fadeIn">
+      {/* Main weather info */}
+        <div className={`${theme.cardBg} border ${theme.cardBorder} rounded-xl sm:rounded-2xl p-3 sm:p-4 text-center shadow-2xl backdrop-blur-md bg-opacity-80 hover:shadow-3xl transition-all duration-300 flex-shrink-0`}>
+            <p className={`text-base sm:text-lg md:text-xl font-bold ${theme.textPrimary} mb-1`}>
+            {weather.name}, {weather.sys.country}
+            </p>
+
+          {/* Weather Icon */}
+            <div className="flex justify-center my-2 transform hover:scale-110 transition-transform duration-300">
+                {getWeatherIcon(weather.weather[0].main, temp)}
+            </div>
+            
+            <p className={`text-3xl sm:text-4xl md:text-5xl font-bold ${theme.textAccent} mb-1`}>{temp}°C</p>
+            <p className={`${theme.textSecondary} capitalize text-xs sm:text-sm md:text-base`}>
+            {weather.weather[0].description}
+            </p>
+        </div>
+
+        {/* Weather details grid */}
+        <div className="grid grid-cols-2 gap-2 flex-1 min-h-0">
+            {weatherDetails.map((item, i) => (
+            <div
+                key={i}
+                className={`${theme.detailsBg} border ${theme.detailsBorder} rounded-lg sm:rounded-xl p-2 sm:p-3 text-center shadow-lg backdrop-blur-sm hover:scale-105 hover:shadow-xl transition-all duration-300 cursor-default flex flex-col items-center justify-center`}>
+                <div className={`text-2xl sm:text-3xl md:text-4xl mx-auto ${item.color} drop-shadow-md mb-1`}>
+                    {item.icon}
+                </div>
+                <p className={`${theme.textSecondary} text-[10px] sm:text-xs font-medium mb-0.5`}>
+                    {item.label}
+                </p>
+                <p className={`font-bold text-sm sm:text-base md:text-lg ${theme.textPrimary}`}>
+                    {item.value}
+                </p>
+            </div>
+        ))}
+        </div>
+    </div>
+);
+}
+
+
